@@ -1,0 +1,30 @@
+flowchart TB
+  subgraph UI["Electron UI (ui)"]
+    User["User (click/drop)"] --> Renderer["Renderer\n(renderer.js, index.html)"]
+    Renderer --> Preload["Preload\n(preload.js)\ncontextBridge"]
+    Preload --> Main["Main\n(main.js)"]
+    Main --> FileHandlers["ipcHandlers/fileHandlers.js"]
+    FileHandlers --> CoreModule["ipcHandlers/dissonanceCore.js"]
+  end
+
+  subgraph Core["Native core / fallback"]
+    CoreModule --> NativeAddon["Native addon\n(dissonance_core)"]
+    CoreModule --> Simulation["JS simulation\n(temp copy)"]
+    NativeAddon --> CoreCPP["core/ (C++ project)"]
+  end
+
+  %% event & flow lines
+  NativeAddon --> Main
+  Simulation --> Main
+  Main --> Preload
+  Preload --> Renderer
+  Renderer --> User
+
+  %% storage
+  Simulation -.-> TempDir[("/tmp/dissonance")]
+  Main -.-> User
+
+  classDef ui fill:#f9f,stroke:#333,stroke-width:1px;
+  classDef core fill:#efe,stroke:#333,stroke-width:1px;
+  class UI ui;
+  class Core core;
