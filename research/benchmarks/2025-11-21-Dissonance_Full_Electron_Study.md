@@ -5,7 +5,7 @@ Full Comparative Study
 ![img.png](img.png)
 
 **Authors:** Luca Martinet, Noé Kurata  
-**Date:** 2025
+**Date:** 2025, Nov 21
 
 ---
 
