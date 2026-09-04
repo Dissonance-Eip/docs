@@ -1,4 +1,14 @@
- # Issue #88: White Noise Threshold-Shaping - Change Documentation
+---
+title: White noise threshold-shaping — issue #88
+status: final
+owner: Noé Kurata
+created: 2026-09-04
+updated: 2026-09-04
+milestone: G
+tags: [benchmark, core, dsp, masking, perturbation]
+---
+
+# White noise threshold-shaping — issue #88
 
 ## Summary
 

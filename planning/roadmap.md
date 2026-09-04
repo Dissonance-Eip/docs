@@ -1,15 +1,34 @@
+---
+title: Roadmap
+status: active
+owner: Noé Kurata
+created: 2025-09-20
+updated: 2026-09-04
+tags: [planning, roadmap]
+---
+
+# Roadmap
+
+## Summary
+
+The intent behind each milestone — objectives, deliverables, acceptance criteria,
+dependencies and risks. For **where the project actually is**, see
+[`milestones.md`](milestones.md), which mirrors the GitHub milestones. This file is
+the plan; that one is the state.
+
 This roadmap expands the short roadmap and maps the project milestones (A–I) to concrete objectives, deliverables, owners, success criteria, dependencies, and risks. Use this file to plan work, assign issues, and track progress across repos: `dissonance-docs`, `dissonance-ui`, and `dissonance-core`.
 
 How to use
-- Each milestone below lists: timeline, primary repo(s), objectives, deliverables, owners (recommended), acceptance criteria, dependencies, and key risks.
-- For each milestone open issue(s) referenced by the milestone ID (for example, "A1", "B3") and link them here.
-- Keep this file lightweight — link to deep-dive docs in `docs/research/`, `docs/design/`, and `docs/research/comparative-studies/` when needed.
+- Each milestone below lists: timeline, primary repo(s), objectives, deliverables, acceptance criteria, dependencies, and key risks.
+- The GitHub milestones are authoritative for scope and status; see [`milestones.md`](milestones.md). The letters here are the original plan and have since diverged from them.
+- Keep this file lightweight — link to deep-dive documents in [`../research/`](../research/) and [`../design/`](../design/) rather than restating them here.
 
 Legend
 - AC: Acceptance criteria — how we know the milestone is complete
 - Risks: things to watch and mitigation suggestions
 
 Milestone A — User Research & Personas
+- Status (2026-09-04): Done
 - Timeline: Start Sep 2025 — End 2025-11-30
 - Primary repo: `dissonance-docs`
 - Objectives:
@@ -17,16 +36,17 @@ Milestone A — User Research & Personas
   - Produce summarized user needs and personas
   - Create slide deck + presentation artifacts
 - Deliverables:
-  - Raw survey exports (CSV/Google Forms) in `surveys/raw/` (A1)
-  - Survey summary report in `surveys/summaries/` (A2)
-  - Personas in `personas/` with short bios and needs mapping (A3)
-  - Slide deck PDF and presentation video in `assets/slides/` and `assets/` (A4, A5)
+  - Raw survey exports (CSV/Google Forms) in [`../research/surveys/`](../research/surveys/) (A1)
+  - Survey summary report in [`../research/surveys/`](../research/surveys/) (A2)
+  - Personas in [`../research/personas/`](../research/personas/) with short bios and needs mapping (A3)
+  - Slide deck PDF and presentation video in [`../assets/slides/`](../assets/slides/) and [`../assets/`](../assets/) (A4, A5)
   - User stories and workflow diagram (A6)
 - AC: Survey + personas uploaded; at least 3 personas with user needs; slide deck available; summary document with recommended user stories.
 - Dependencies: access to raw survey exports; volunteers for interviews
 - Risks: incomplete survey metadata — mitigate by annotating raw exports; low response clarity — use follow-up interviews.
 
 Milestone B — Veille & Technical Benchmarking
+- Status (2026-09-04): Done — [#12](https://github.com/Dissonance-Eip/docs/issues/12) (expert interviews) still open
 - Timeline: 2025-11-01 — 2026-01-23
 - Primary repo: `dissonance-docs` (research)
 - Objectives:
@@ -34,9 +54,9 @@ Milestone B — Veille & Technical Benchmarking
   - Benchmark parsing and FFT approaches (C++ vs WASM vs Node vs Python)
   - Produce POCs: Electron audio loader and WASM FFT test (B5, B6)
 - Deliverables:
-  - `research/veille/` notes with sources and short abstracts (B1)
+  - [`../research/veille/`](../research/veille/) notes with sources and short abstracts (B1)
   - Export of bookmarks / RSS list and newsletter summary (B2)
-  - Benchmark reports (B3, B4) with scripts and raw outputs in `research/benchmarks/`
+  - Benchmark reports (B3, B4) with scripts and raw outputs in [`../research/benchmarks/`](../research/benchmarks/)
   - POC #1: Electron audio loader project in `dissonance-ui` repo (B5)
   - POC #2: WASM FFT microbenchmark showing baseline performance (B6)
   - Expert interview notes (B7)
@@ -46,6 +66,7 @@ Milestone B — Veille & Technical Benchmarking
 - Risks: environment-dependent results — run benchmarks on at least two platforms and include versions.
 
 Milestone C — Repo Architecture & CI/CD
+- Status (2026-09-04): Done
 - Timeline: 2025-11-15 — 2025-12-20
 - Primary repo: `dissonance-ui`, `dissonance-core`, `dissonance-docs`
 - Objectives:
@@ -54,18 +75,19 @@ Milestone C — Repo Architecture & CI/CD
   - Document tech environment and dev setup
 - Deliverables:
   - `README.md`, `CONTRIBUTING.md`, issue and PR templates in each repo (C1–C4)
-  - GitHub Actions workflows: `ci-ui.yml`, `ci-core.yml` (C5)
+  - GitHub Actions workflows: `ui-quality-checks.yml`, `release-app.yml` and `sync-core-addon.yml` in `ui`; `ci.yml` and `release-addon.yml` in `core` (C5)
   - ESLint + Prettier configs and a style guide (C6)
-  - Architecture diagram and docs in `docs/design/core` and `docs/design/ui` (C7–C8)
+  - Architecture diagram and documents in [`../design/core/`](../design/core/) and [`../design/ui/`](../design/ui/) (C7–C8)
 - AC: CI runs on main branch; linters and basic build/tests pass in CI; contributing guide available.
 - Dependencies: GitHub workflows access, minimal unit tests
 - Risks: native build differences (Linux vs macOS) — use matrix runners and document host requirements.
 
 Milestone D — Electron UI Skeleton
+- Status (2026-09-04): Done
 - Timeline: 2025-12-01 — 2026-03-13
 - Primary repo: `dissonance-ui`
 - Objectives:
-  - Implement Electron + React + Vite skeleton and base styles
+  - Implement the Electron skeleton and base styles (planned as React + Vite; shipped as vanilla JavaScript with Tailwind — see [ADR 001](../design/core/2025-11-21-adr-001-ui-framework-and-dsp-integration.md))
   - Implement core flows: file drag/drop, WAV metadata display, playback, mock processing
   - Add settings placeholders, theme support, and IPC bridge
 - Deliverables:
@@ -83,6 +105,7 @@ Milestone D — Electron UI Skeleton
 - Risks: platform packaging differences — define packaging plan early.
 
 Milestone E — C++ Evaluation & Technology Strategy
+- Status (2026-09-04): In progress — E1–E3 written; the migration decision and the DSP benchmark remain
 - Timeline: 2026-03-01 — 2026-06-12
 - Primary repo: `dissonance-docs`, `dissonance-core`
 - Objectives:
@@ -102,6 +125,7 @@ Milestone E — C++ Evaluation & Technology Strategy
 === YEAR 2 (DSP and perturbations) ===
 
 Milestone F — DSP Kernel (STFT/ISTFT)
+- Status (2026-09-04): Nearly done — only the kernel documentation ([core#40](https://github.com/Dissonance-Eip/core/issues/40)) remains
 - Timeline: 2026-07-01 — 2026-10-09
 - Primary repo: `dissonance-core`
 - Objectives:
@@ -120,6 +144,7 @@ Milestone F — DSP Kernel (STFT/ISTFT)
 - Risks: numerical boundary issues and reconstruction artifacts — add automated regression tests.
 
 Milestone G — Adversarial Perturbation v1
+- Status (2026-09-04): In progress — the active work
 - Timeline: 2026-11-01 — 2027-01-22
 - Primary repo: `dissonance-core`
 - Objectives:
@@ -138,6 +163,7 @@ Milestone G — Adversarial Perturbation v1
 - Risks: adversarial attacks may transfer differently across models — ensure evaluations on multiple models and document limits.
 
 Milestone H — Adversarial Perturbation v2
+- Status (2026-09-04): Not started
 - Timeline: 2027-02-01 — 2027-03-15
 - Primary repo: `dissonance-core`
 - Objectives:
@@ -154,6 +180,7 @@ Milestone H — Adversarial Perturbation v2
 - Risks: increased perceptual artifacts — include human listening tests to validate imperceptibility.
 
 Milestone I — Optimization, Packaging & Final Docs
+- Status (2026-09-04): Not started — [`ui` Milestone I](https://github.com/Dissonance-Eip/ui/milestones) has 5 open issues
 - Timeline: 2027-03-15 — 2027-04-30
 - Primary repos: `dissonance-core`, `dissonance-ui`, `dissonance-docs`
 - Objectives:
@@ -199,3 +226,8 @@ Artifacts and repo mapping
 - `dissonance-ui` — Electron UI skeleton, POC loader, packaging configs
 - `dissonance-core` — C++ prototype, DSP kernel, perturbation engines, tests
 
+## Related
+
+- [`milestones.md`](milestones.md) — the authoritative status, mirrored from GitHub
+- [`onboarding.md`](onboarding.md) — getting set up
+- [`../design/core/`](../design/core/) — the architecture decision records

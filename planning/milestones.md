@@ -1,116 +1,142 @@
-Project Milestones
+---
+title: Milestones
+status: active
+owner: Noé Kurata
+created: 2025-09-15
+updated: 2026-09-04
+tags: [planning, milestones]
+---
 
-This file mirrors the project milestones and due dates. Keep updated as milestones change.
+# Milestones
 
-2025
-Sep–Nov     Milestone A — User Research & Personas
-Nov–Jan     Milestone B — Veille & Benchmarking
-Nov–Dec     Milestone C — Repo Architecture & CI/CD
-Dec–Mar     Milestone D — Electron UI Skeleton
+## Summary
 
-2026
-Mar–Jun     Milestone E — C++ Evaluation & Technology Strategy
-Jul–Oct     Milestone F — DSP Kernel
-Nov–Jan     Milestone G — Adversarial Perturbation v1
+Where the project stands, per milestone, across the three repositories. This
+file mirrors the GitHub milestones — it is not a second plan. When the two
+disagree, GitHub is right and this file is stale.
 
-2027
-Feb–Mar     Milestone H — Adversarial Perturbation v2
-Mar–Apr     Milestone I — Optimization, Packaging & Final Docs
+As of 2026-09-04 the project is working through **Milestone G — Adversarial
+Perturbation v1** in `core` and `ui`, with **Milestone E** open in `docs` and
+**Milestone I — Packaging & Release** queued in `ui`.
 
+## Status, 2026-09-04
 
-MILESTONE 0 - Project Planning & Documentation Architecture
-01 — Create documentation folder structure
-02 — Add architecture diagram
-03 — Add development environment documentation
-04 — Add testing policy
-05 — Add CI/CD overview (for all repos)
-06 — Add roadmap for 2-year project
-07 — Add meeting notes folder
-08 — Add personas → features mapping
-09 — Create onboarding guide for future teammates
+Issue counts are from the GitHub milestone API on 2026-09-04.
 
-MILESTONE A — User Research & Personas
-A1 — Add raw survey results
-A2 — Summary of user needs & pain points
-A3 — Add personas
-A4 — Add slide deck PDF
-A5 — Add presentation video link
-A6 — User stories & workflow from personas
+### `docs` — [Dissonance-Eip/docs](https://github.com/Dissonance-Eip/docs/milestones)
 
-MILESTONE B — Veille & Technical Benchmarking
-B1 — Structured veille notes
-B2 — Export bookmarks, RSS, newsletters
-B3 — Benchmark C++ vs TS/WASM vs Python
-B4 — Benchmark Electron vs Web App vs JUCE
-B5 — POC #1 — Electron audio loader
-B6 — POC #2 — WASM FFT test
-B7 — Expert interviews documentation
-B8 — Technical choice justification
+| Milestone | Open | Closed | State |
+| --- | ---: | ---: | --- |
+| 0 — Project Planning & Documentation Architecture | 0 | 10 | Closed |
+| A — User Research & Personas | 0 | 5 | Closed |
+| B — Veille & Technical Benchmarking | 1 | 6 | Closed — [#12](https://github.com/Dissonance-Eip/docs/issues/12) still open |
+| E — C++ Evaluation & Technology Strategy | 3 | 0 | **Open** |
+| EIP Pool | 3 | 0 | **Open** |
 
-MILESTONE C — Repo Architecture & CI/CD (UI & Core)
-C1 — Initialize Electron + React + Vite structure
-C2 — Add README
-C3 — Add CONTRIBUTING.md
-C4 — Add issue & PR templates
-C5 — Set up GitHub Actions (UI)
-C6 — Add ESLint + Prettier
-C7 — Add UI structure documentation
-C8 — Add tech environment documentation
+### `core` — [Dissonance-Eip/core](https://github.com/Dissonance-Eip/core/milestones)
 
-MILESTONE D — Electron UI Skeleton
-D1 — File drag & drop
-D2 — Display WAV metadata
-D3 — Audio playback (“Before”)
-D4 — Mock processing screen
-D5 — Processed file placeholder
-D6 — Main UI flow
-D7 — Settings panel (placeholders)
-D8 — Light/dark theme
-D9 — UI flow documentation
-D10 — Tailwind base styles
-D11 — IPC bridge
+| Milestone | Open | Closed | State |
+| --- | ---: | ---: | --- |
+| 1 — MVP | 0 | 15 | Closed |
+| E — C++ Native Add-on Architecture Decision | 0 | 1 | Closed |
+| F — C++ DSP Kernel as Node Add-on (STFT/ISTFT, Audio I/O) | 1 | 9 | **Open** — only [#40](https://github.com/Dissonance-Eip/core/issues/40), the kernel documentation, remains |
+| G — Adversarial Perturbation v1 (Proof of Concept, C++ Add-on) | 7 | 8 | **Open — active** |
+| H — Adversarial Perturbation v2 (Model Coverage + Imperceptibility) | 0 | 0 | Open, not started |
 
-MILESTONE E — C++ Evaluation & Technology Strategy
-E1 — Document existing C++ WAV parser
-E2 — Benchmark C++ vs Node vs WASM parsing
-E3 — Integration complexity evaluation
-E4 — Migration decision (C++ / TS / WASM / Python)
-E5 — Year 2 technology strategy document
+### `ui` — [Dissonance-Eip/ui](https://github.com/Dissonance-Eip/ui/milestones)
 
-MILESTONE F — DSP Kernel (Year 2)
-F1 — PCM WAV parser (TS/WASM)
-F2 — FLAC decoder
-F3 — STFT implementation
-F4 — ISTFT implementation
-F5 — Window functions
-F6 — Worker-based DSP
-F7 — Reconstruction tests
-F8 — WAV writer
-F9 — DSP kernel documentation
+| Milestone | Open | Closed | State |
+| --- | ---: | ---: | --- |
+| 1 — MVP | 0 | 13 | Closed |
+| C — Repo Architecture & CI/CD (UI) | 0 | 7 | Closed |
+| D — Electron UI Skeleton | 0 | 10 | Closed |
+| G — Adversarial Perturbation v1 (Proof of Concept, C++ Add-on) | 2 | 2 | **Open — active** |
+| I — Packaging & Release | 5 | 0 | Open, not started |
 
-MILESTONE G — Adversarial Perturbation v1 (Year 2)
-G1 — Masking threshold estimator
-G2 — Spectral perturbation module
-G3 — LUFS safety rails
-G4 — Zod config schema
-G5 — ABX testing helper
-G6 — Perturbation v1 documentation
+## What is open right now
 
-MILESTONE H — Adversarial Perturbation v2 (Year 2)
-H1 — Temporal jitter engine
-H2 — Phase distortion engine
-H3 — Hybrid perturbation engine
-H4 — Model testing harness
-H5 — Perturbation v2 documentation
+### `docs` — Milestone E, C++ Evaluation & Technology Strategy
 
-MILESTONE I — Optimization, Packaging & Final Documentation (Year 2)
-I1 — Performance profiling
-I2 — DSP optimization pass
-I3 — Electron Builder configuration
-I4 — Build scripts for distribution
-I5 — Auto-update setup (optional)
-I6 — Packaging documentation
-I7 — Final wiki
-I8 — Final project report
+| Issue | Deliverable | State |
+| --- | --- | --- |
+| [#23](https://github.com/Dissonance-Eip/docs/issues/23) | Document the existing C++ WAV parser | Written — [parser audit](../design/core/2026-09-04-cpp-wav-parser-audit.md) |
+| [#24](https://github.com/Dissonance-Eip/docs/issues/24) | Benchmark C++ vs Node | Written — [benchmark](../research/benchmarks/2026-09-04-cpp-vs-node-wav-parsing/) |
+| [#25](https://github.com/Dissonance-Eip/docs/issues/25) | Document integration complexity of C++ into Electron | Written — [integration analysis](../design/core/2026-09-04-cpp-electron-integration-complexity.md) |
 
+Two further deliverables have no issue yet and follow from those three:
 
+- **The migration decision itself.** ADR 002 recording why the project ships a
+  C++ native addon rather than the TypeScript/WASM architecture chosen in
+  [ADR 001](../design/core/2025-11-21-adr-001-ui-framework-and-dsp-integration.md).
+- **The DSP benchmark it should rest on.** The parsing benchmark concluded that
+  parsing is not the argument for C++;
+  [the STFT benchmark](../research/benchmarks/2026-07-08-stft-cpp-vs-ts-vs-wasm/)
+  exists in source form and has never been run to a recorded result.
+
+### `docs` — Milestone B
+
+- [#12](https://github.com/Dissonance-Eip/docs/issues/12) — Contact DSP/audio
+  experts & document discussion. Notes go in
+  [`../research/interviews/`](../research/interviews/), which is currently empty.
+
+### `docs` — EIP Pool
+
+Three school deliverables, none of which has a document yet:
+
+| Issue | Deliverable |
+| --- | --- |
+| [#52](https://github.com/Dissonance-Eip/docs/issues/52) | Acceptance Test Plan |
+| [#53](https://github.com/Dissonance-Eip/docs/issues/53) | Poster for Dissonance |
+| [#54](https://github.com/Dissonance-Eip/docs/issues/54) | Warm Up Presentation |
+
+### `core` — Milestones F and G
+
+F is one issue from closing: [#40](https://github.com/Dissonance-Eip/core/issues/40),
+the DSP kernel documentation. G is the active work — the open issues are the
+limiter, the LUFS safeguard, the ABX export helper, mask-aware shaping for the
+remaining perturbation modes, and the v1 write-up.
+
+### `ui` — Milestones G and I
+
+G: perturbation mode in the Compare view and export filename, plus UI tests for
+the mode controls. I (Packaging & Release) has five issues and has not started.
+
+## The original two-year plan
+
+The A–I lettering comes from the original plan agreed at the start of the
+project. The GitHub milestones have since diverged from it — names differ,
+granularity differs, and some letters mean different things in different repos
+(`E` is "C++ Evaluation & Technology Strategy" in `docs` and "C++ Native Add-on
+Architecture Decision" in `core`). Treat the tables above as authoritative and
+[`roadmap.md`](roadmap.md) as the narrative intent behind them.
+
+| Letter | Original scope | Window |
+| --- | --- | --- |
+| 0 | Project planning & documentation architecture | 2025-09 → 2025-11 |
+| A | User research & personas | 2025-09 → 2025-11 |
+| B | Veille & technical benchmarking | 2025-11 → 2026-01 |
+| C | Repo architecture & CI/CD | 2025-11 → 2025-12 |
+| D | Electron UI skeleton | 2025-12 → 2026-03 |
+| E | C++ evaluation & technology strategy | 2026-03 → 2026-06 |
+| F | DSP kernel (STFT/ISTFT) | 2026-07 → 2026-10 |
+| G | Adversarial perturbation v1 | 2026-11 → 2027-01 |
+| H | Adversarial perturbation v2 | 2027-02 → 2027-03 |
+| I | Optimisation, packaging & final documentation | 2027-03 → 2027-04 |
+
+Note that G is running ahead of the original window and E behind it.
+
+## Keeping this current
+
+Update at each milestone open or close, not continuously. The counts come from:
+
+```bash
+for r in docs core ui; do
+  curl -s "https://api.github.com/repos/Dissonance-Eip/$r/milestones?state=all&per_page=100" \
+    | python3 -c "import json,sys; [print(f\"{m['title']:<62} open={m['open_issues']:>2} closed={m['closed_issues']:>2}\") for m in json.load(sys.stdin)]"
+done
+```
+
+## Related
+
+- [`roadmap.md`](roadmap.md) — objectives, deliverables and risks per milestone
+- [`../README.md`](../README.md) — repository map

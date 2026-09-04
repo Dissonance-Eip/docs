@@ -1,0 +1,25 @@
+# macOS
+.DS_Store
+._*
+__MACOSX/
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# Editors
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+
+# Build output from benchmark harnesses
+research/benchmarks/**/build/
+research/benchmarks/**/corpus/

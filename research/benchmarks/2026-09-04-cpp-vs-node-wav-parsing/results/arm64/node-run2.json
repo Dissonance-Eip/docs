@@ -1,0 +1,134 @@
+{
+  "runner": "node",
+  "nodeVersion": "v22.23.2",
+  "reps": 41,
+  "files": [
+    {
+      "file": "corpus/flt32_30s.wav",
+      "samples": 2646000,
+      "header": {
+        "min": 0.014958,
+        "median": 0.017875,
+        "mean": 0.041693999999999995
+      },
+      "decode": {
+        "min": 13.971,
+        "median": 14.249875,
+        "mean": 14.316524512195127
+      }
+    },
+    {
+      "file": "corpus/pcm08_30s.wav",
+      "samples": 2646000,
+      "header": {
+        "min": 0.013208,
+        "median": 0.013375,
+        "mean": 0.018167658536585373
+      },
+      "decode": {
+        "min": 3.261541,
+        "median": 3.557083,
+        "mean": 3.989986707317073
+      }
+    },
+    {
+      "file": "corpus/pcm16_05s.wav",
+      "samples": 441000,
+      "header": {
+        "min": 0.012833,
+        "median": 0.013041,
+        "mean": 0.013395292682926833
+      },
+      "decode": {
+        "min": 1.423083,
+        "median": 1.562667,
+        "mean": 1.641358780487805
+      }
+    },
+    {
+      "file": "corpus/pcm16_180s.wav",
+      "samples": 15876000,
+      "header": {
+        "min": 0.013042,
+        "median": 0.013334,
+        "mean": 0.01634343902439025
+      },
+      "decode": {
+        "min": 54.601833,
+        "median": 62.046375,
+        "mean": 60.86438624390244
+      }
+    },
+    {
+      "file": "corpus/pcm16_30s.wav",
+      "samples": 2646000,
+      "header": {
+        "min": 0.012916,
+        "median": 0.013125,
+        "mean": 0.01921546341463415
+      },
+      "decode": {
+        "min": 8.953708,
+        "median": 9.363292,
+        "mean": 9.381623951219511
+      }
+    },
+    {
+      "file": "corpus/pcm16_600s.wav",
+      "samples": 52920000,
+      "header": {
+        "min": 0.013166,
+        "median": 0.013417,
+        "mean": 0.017211414634146344
+      },
+      "decode": {
+        "min": 197.263042,
+        "median": 200.175626,
+        "mean": 202.32827151219507
+      }
+    },
+    {
+      "file": "corpus/pcm24_30s.wav",
+      "samples": 2646000,
+      "header": {
+        "min": 0.01225,
+        "median": 0.0125,
+        "mean": 0.01689839024390244
+      },
+      "decode": {
+        "min": 7.304167,
+        "median": 7.549625,
+        "mean": 7.625166707317073
+      }
+    },
+    {
+      "file": "corpus/pcm32_30s.wav",
+      "samples": 2646000,
+      "header": {
+        "min": 0.012416,
+        "median": 0.013333,
+        "mean": 0.01883541463414634
+      },
+      "decode": {
+        "min": 11.855542,
+        "median": 12.496792,
+        "mean": 12.595433951219512
+      }
+    },
+    {
+      "file": "corpus/real_sound_186s.wav",
+      "samples": 16433152,
+      "header": {
+        "min": 0.010917,
+        "median": 0.011375,
+        "mean": 0.08504273170731708
+      },
+      "decode": {
+        "min": 56.271917,
+        "median": 63.366292,
+        "mean": 61.838173902439024
+      }
+    }
+  ],
+  "peakRssKb": 424112
+}

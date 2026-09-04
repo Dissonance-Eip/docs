@@ -1,113 +1,145 @@
-# Dissonance - Architecture Overview
-
-This document provides a high-level architecture diagram and explanation of the Dissonance project (UI + Core), focusing on the Electron UI, IPC, and the native C++ core integration points.
-
-The diagram is provided in Mermaid format (renderable by many editors or tools) and a short ASCII fallback.
-
+---
+title: Architecture overview
+status: active
+owner: Noé Kurata
+created: 2025-12-10
+updated: 2026-09-04
+tags: [architecture, ui, core, ipc]
 ---
 
-## Mermaid diagram
+# Architecture overview
 
-The Mermaid source has been moved to `docs/architecture.mmd` to ensure it is parser-safe and renderable by the mermaid CLI; the rendered SVG is available at `docs/architecture.svg` (embedded below).
+## Summary
 
-To edit the diagram, open `docs/architecture.mmd` and re-render with mermaid-cli or your editor's Mermaid preview plugin.
+Dissonance is an Electron desktop application whose audio processing runs in a
+C++ engine loaded as a Node native addon. The renderer never touches audio or
+the filesystem: everything crosses a `contextBridge` preload into the main
+process, which owns the addon and all disk I/O. This document describes that
+boundary and the channels across it.
+
+Verified against `ui` / `dev` (`a9b099c`) and `core` / `dev` (`13bac85`),
+2026-09-04.
+
+## The three processes
 
 ```text
-# render with mermaid-cli (npx)
-# from the repository root
-npx @mermaid-js/mermaid-cli -i docs/architecture.mmd -o docs/architecture.svg
+┌─────────────────────────────────────────────────────────────┐
+│ Renderer  (renderer/)                                       │
+│   Views, controllers, services — plain browser JavaScript.  │
+│   No Node integration. Talks only to window.dissonance.     │
+└───────────────────────────┬─────────────────────────────────┘
+                            │  contextBridge
+┌───────────────────────────▼─────────────────────────────────┐
+│ Preload  (preload.js)                                       │
+│   Exposes window.dissonance — a fixed list of methods,      │
+│   each forwarding to one IPC channel.                       │
+└───────────────────────────┬─────────────────────────────────┘
+                            │  ipcRenderer.invoke / .on
+┌───────────────────────────▼─────────────────────────────────┐
+│ Main  (main.js → main/MainApplication.js)                   │
+│   MainWindowManager  — window creation                      │
+│   ipcHandlers/core/  — addon loading, core:* handlers       │
+│   ipcHandlers/       — file dialog, theme, log forwarding   │
+└───────────────────────────┬─────────────────────────────────┘
+                            │  require('…dissonance_core.node')
+┌───────────────────────────▼─────────────────────────────────┐
+│ Native addon  (core, built via node-gyp / N-API)            │
+│   process() · readMetadata() · writeTags()                  │
+└─────────────────────────────────────────────────────────────┘
 ```
 
----
+`contextIsolation` is on and `nodeIntegration` is off, so the renderer cannot
+`require` anything. The preload's method list is the entire attack surface.
 
-## ASCII fallback diagram
+## IPC channels
 
-User -> Renderer (renderer.js / index.html)
-  Renderer -> Preload (preload.js, contextBridge)
-  Preload -> Main (ipcRenderer.invoke)
-  Main -> ipcHandlers/fileHandlers.js -> delegates to ipcHandlers/dissonanceCore.js
-  dissonanceCore -> Native addon (dissonance_core) OR fallback simulation
-  Native addon -> core C++ project (core/)
-  Native addon / simulation -> send events to Main -> Main forwards via webContents.send -> Preload -> Renderer
+Request/response, via `ipcRenderer.invoke` → `ipcMain.handle`:
 
----
+| Channel | Preload method | Purpose |
+| --- | --- | --- |
+| `core:readMetadata` | `readFileMetadata(filePath)` | WAV header and LIST/INFO tags, without decoding audio |
+| `core:process` | `processFile(filePath, options)` | Run the protection pipeline; resolves with the processed path |
+| `core:writeTags` | `writeTags(filePath, tags)` | Rewrite the LIST/INFO chunk in place |
+| `core:export` | `exportFile(processedPath)` | Copy a processed file to a user-chosen destination |
+| `core:cleanupProcessed` | `cleanupProcessedFile(path)` | Delete one temporary processed file |
+| `dialog:openFile` | `openFile()` | Native open dialog; returns the selected path |
+| `ui:getSystemTheme` | `getSystemTheme()` | Current OS colour scheme |
 
-## Key IPC channels and APIs
+Main → renderer events, via `webContents.send` → `ipcRenderer.on`:
 
-- From renderer (via preload contextBridge):
-  - `dialog:openFile` -> open file dialog and return selected path
-  - `file:getStats` -> return file metadata
-  - `core:process` -> start processing a file (string or object with options)
-  - `core:export` -> export processed file (string or { processedPath, destPath })
+| Event | Preload subscription |
+| --- | --- |
+| `core:status` | `onCoreStatus(cb)` |
+| `ui:systemTheme` | `onSystemTheme(cb)` |
+| `app:flushRequest` | `onAppFlushRequest(cb)` |
 
-- From main -> renderer (events forwarded to renderer through preload):
-  - `core:status` -> high-level lifecycle updates (imported, sending, processing, processed, exported, error)
-  - `core:progress` -> numeric/structured progress
-  - `core:log` -> textual logs
+Renderer → main, fire and forget: `ui:log` (`logToMain`) and `app:flushDone`
+(`notifyFlushDone`).
 
+Every subscription helper returns an unsubscribe function; the renderer's
+`Disposable` base class tracks them so views clean up on unmount.
 
-## Important files (where to look)
+## Where the code lives
 
-- `ui/` (Electron UI):
-  - `index.html` — UI markup
-  - `renderer.js` — DOM wiring, uses `window.dissonance` API
-  - `preload.js` — `contextBridge` safe API exposing `window.dissonance`
-  - `main.js` — creates BrowserWindow and registers handlers
-  - `ipcHandlers/fileHandlers.js` — file dialog and file stat handlers; delegates core handlers
-  - `ipcHandlers/dissonanceCore.js` — central core handler and addon loader (new central module)
+### `ui`
 
-- `core/` (C++):
-  - CMake-based C++ project (intended source for native addon)
-  - When built as a Node addon it should be importable as `dissonance_core` (bindings or node-gyp/cmake-js)
+| Path | Role |
+| --- | --- |
+| `main.js` | Entry point — constructs `MainApplication` and nothing else |
+| `main/MainApplication.js` | Application lifecycle, handler registration, quit/flush |
+| `main/MainWindowManager.js` | `BrowserWindow` creation and window state |
+| `preload.js` | The `window.dissonance` bridge |
+| `ipcHandlers/core/coreSetup.js` | Loads the addon once at module load; wires the handlers |
+| `ipcHandlers/core/CoreAddonLoader.js` | Finds and loads the platform `.node` binary |
+| `ipcHandlers/core/CoreIpcHandlers.js` | The `core:*` handlers |
+| `ipcHandlers/core/TempFileManager.js` | Temporary processed files, cleaned up on quit |
+| `ipcHandlers/FileDialogHandlers.js` | `dialog:openFile` |
+| `ipcHandlers/themeHandlers.js` | `ui:getSystemTheme`, `ui:systemTheme` |
+| `renderer/` | Views, controllers, services — see `ui/renderer/ARCHITECTURE.md` |
 
+### `core`
 
-## Data flow (Process example)
-1. User drops or opens a file in the renderer.
-2. Renderer calls `window.dissonance.processFile(filePath)` (via `preload.js`).
-3. `preload` invokes `ipcRenderer.invoke('core:process', payload)`.
-4. The main process receives the call. `ipcHandlers/dissonanceCore.js` handles it.
-   - If a native addon is present, it calls `addon.process(filePath, options)`.
-   - If not, it runs a JS simulation that copies the file to a temp directory and emits progress/status.
-5. During processing, the main process sends `core:status` and `core:progress` events back to the renderer.
-6. The renderer updates the UI and enables Export when done.
-7. On Export, renderer calls `window.dissonance.exportFile(processedPath)`; `dissonanceCore` will copy the file to the chosen destination (or use the `destPath` provided) and emit `core:status` exported.
+| Path | Role |
+| --- | --- |
+| `src/addon/addon.cpp` | N-API entry point — three async workers |
+| `src/audio/Pipeline.cpp` | Stage chain: gain → windowed FFT → perturbation → masking |
+| `src/utils/WavParser.cpp` | RIFF/WAVE parsing and sample decoding |
+| `binding.gyp` | Addon build; `CMakeLists.txt` builds the CLI and tests |
 
+## Data flow — processing a file
 
-## Security & design notes
+1. The user drops a file on the renderer's drop zone.
+2. The renderer calls `window.dissonance.readFileMetadata(path)` to fill the
+   metadata panel. This is header-only in the addon — no audio is decoded.
+3. On Process, the renderer calls `window.dissonance.processFile(path, options)`.
+4. `CoreIpcHandlers` allocates a temporary output path through `TempFileManager`
+   and calls `addon.process(inputPath, { outputPath, perturbation, modes })`.
+5. The addon runs the pipeline on a worker thread and resolves
+   `{ ok, processedPath }`. Status updates reach the renderer on `core:status`.
+6. On Export, `core:export` opens a save dialog and copies the temporary file to
+   the chosen destination.
+7. On quit, `MainApplication` calls `cleanupAllTempFiles()`.
 
-- `contextIsolation: true` and `nodeIntegration: false` (set in `main.js`) — the `preload.js` exposes only a minimal API surface (`window.dissonance`) to the renderer.
-- Centralizing core handling in `ui/ipcHandlers/dissonanceCore.js` makes it easy to replace the simulation with the real native addon without changing other modules.
-- The core addon contract should ideally be Promise-based: `process(filePath, options)` returns a Promise resolving to `{ processedPath }` and optionally expose `.on('progress', cb)` / `.on('log', cb)` for event streaming.
+If the addon fails to load, `CoreAddonLoader.load()` returns `null` and the
+`core:*` handlers return structured errors. There is no simulation fallback —
+the app opens but processing fails. See
+[the integration analysis](design/core/2026-09-04-cpp-electron-integration-complexity.md)
+for what that means in practice and which platforms currently have no binary.
 
+## Diagram source
 
-## How to render the Mermaid diagram
-
-- Use VS Code with the "Markdown Preview Mermaid Support" or "Mermaid Markdown Preview" extensions.
-- Or install mermaid-cli and render to PNG/SVG:
+The Mermaid source is [`architecture.mmd`](architecture.mmd) and the rendered
+output is [`architecture.svg`](architecture.svg). Re-render after editing:
 
 ```bash
-# install once (requires Node)
-npm install -g @mermaid-js/mermaid-cli
-
-# render to svg from repository root
-mmdc -i docs/architecture.md -o docs/architecture.svg
+npx @mermaid-js/mermaid-cli -i architecture.mmd -o architecture.svg
 ```
 
-> Note: Some Mermaid renderers expect only the mermaid block rather than the whole markdown file. If rendering fails, extract the mermaid block into its own `.mmd` file and run `mmdc -i docs/diagram.mmd -o docs/diagram.svg`.
+![Dissonance architecture: renderer, preload bridge, main process and native C++ addon](./architecture.svg)
 
----
+## Related
 
-## Visual diagram
-
-The generated SVG is embedded below for quick viewing (or open `docs/architecture.svg`).
-
-![Architecture diagram](./architecture.svg)
-
----
-
-If you want, I can:
-- generate an SVG/PDF directly and add it to `docs/` in the repo,
-- produce a PlantUML version instead, or
-- produce a higher-detail diagram that shows function-level call sequences (sequence diagram) for `process` and `export` flows.
-
-Which would you prefer?
+- [`research/benchmarks/2026-05-31-poc-electron-audio-loader.md`](research/benchmarks/2026-05-31-poc-electron-audio-loader.md) — how the addon is discovered and loaded, in detail
+- [`design/core/2026-09-04-cpp-wav-parser-audit.md`](design/core/2026-09-04-cpp-wav-parser-audit.md) — the WAV parser behind `readMetadata` and `process`
+- [`design/core/2026-09-04-cpp-electron-integration-complexity.md`](design/core/2026-09-04-cpp-electron-integration-complexity.md) — build, packaging and failure modes of the addon boundary
+- `ui/renderer/ARCHITECTURE.md` — the renderer's internal structure
