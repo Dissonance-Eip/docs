@@ -3,7 +3,7 @@ title: Milestones
 status: active
 owner: Noé Kurata
 created: 2025-09-15
-updated: 2026-09-04
+updated: 2026-09-14
 tags: [planning, milestones]
 ---
 
@@ -81,13 +81,14 @@ Two further deliverables have no issue yet and follow from those three:
 
 ### `docs` — EIP Pool
 
-Three school deliverables, none of which has a document yet:
+Three school deliverables. The acceptance test plan is written; the poster and
+the warm-up presentation have no document yet:
 
-| Issue | Deliverable |
-| --- | --- |
-| [#52](https://github.com/Dissonance-Eip/docs/issues/52) | Acceptance Test Plan |
-| [#53](https://github.com/Dissonance-Eip/docs/issues/53) | Poster for Dissonance |
-| [#54](https://github.com/Dissonance-Eip/docs/issues/54) | Warm Up Presentation |
+| Issue | Deliverable | State |
+| --- | --- | --- |
+| [#52](https://github.com/Dissonance-Eip/docs/issues/52) | Acceptance Test Plan | Closed — [acceptance test plan](acceptance-test-plan/) |
+| [#53](https://github.com/Dissonance-Eip/docs/issues/53) | Poster for Dissonance | Open |
+| [#54](https://github.com/Dissonance-Eip/docs/issues/54) | Warm Up Presentation | Open |
 
 ### `core` — Milestones F and G
 

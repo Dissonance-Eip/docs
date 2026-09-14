@@ -12,7 +12,7 @@ audio protection tool. The code lives in two sibling repositories:
 ## Where things are
 
 ```text
-planning/          roadmap, milestones, onboarding, policies, documentation audits
+planning/          roadmap, milestones, onboarding, policies, acceptance test plan
 design/
   core/            architecture decision records and C++ technical notes
   ui/              UI flows and mockups
