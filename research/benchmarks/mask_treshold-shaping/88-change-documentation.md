@@ -37,7 +37,7 @@ perturbation effectiveness.
 |------|--------|
 | `core/include/audio/PerturbationStage.hpp` | `applyWhiteNoise` signature: static -> non-static |
 | `core/src/audio/PerturbationStage.cpp` | Rewrote `applyWhiteNoise` with STFT mask-gating; conditional HP skip |
-| `core/tests/perturbation_stage_test.cpp` | 4 new tests + 2 pre-existing assertion fixes |
+| `core/tests/perturbation_stage_test.cpp` | 4 new tests |
 
 ## Test results
 
