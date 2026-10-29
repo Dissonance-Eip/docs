@@ -14,6 +14,10 @@ New here? Issues labelled
 are small and self-contained. Found a security problem? Do not open a public
 issue; follow the [security policy](.github/SECURITY.md) instead.
 
+How decisions are made, how disagreements are settled and how releases and
+versions work is in [`GOVERNANCE.md`](GOVERNANCE.md). What tests to write, where
+they live and what CI checks is in [`planning/test-strategy.md`](planning/test-strategy.md).
+
 ## Workflow
 
 The same steps apply in every repository.
@@ -88,9 +92,10 @@ npm run format:cpp    # CI fails on unformatted C++
 npm run cppcheck
 ```
 
-The perturbation engine may become closed source (see
-[ADR 003, issue #55](https://github.com/Dissonance-Eip/docs/issues/55)); if it
-does, this section will say how contributions to it work.
+The perturbation engine is closed source, so outside contributions to it are
+not accepted (see
+[ADR 003](design/core/2026-10-29-adr-003-open-scope.md), pending written
+validation). Contributions go to `ui` and `docs`.
 
 ## Documentation (docs)
 

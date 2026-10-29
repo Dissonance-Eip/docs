@@ -81,5 +81,5 @@ F48 exercises the `WAVE_FORMAT_EXTENSIBLE` limitation documented in the
 
 - [Issue #52](https://github.com/Dissonance-Eip/docs/issues/52) — the EIP Pool task this plan delivers, with the Epitech template and example
 - [`../milestones.md`](../milestones.md) — project status by milestone
-- [`../testing-policy-core.md`](../testing-policy-core.md) — automated testing for the C++ core
+- [`../test-strategy.md`](../test-strategy.md): automated testing for `core` and `ui`
 - [`../../design/core/2026-09-04-cpp-wav-parser-audit.md`](../../design/core/2026-09-04-cpp-wav-parser-audit.md) — the parser limitation F48 checks
