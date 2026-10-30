@@ -3,7 +3,7 @@ title: Initial static analysis report
 status: draft
 owner: Luca Martinet
 created: 2026-10-29
-updated: 2026-10-29
+updated: 2026-10-30
 milestone: L
 tags: [planning, testing, quality, static-analysis]
 ---
@@ -83,4 +83,5 @@ TODO(team): install it and add its counts by category.
 
 - [`test-strategy.md`](test-strategy.md)
 - [`dependency-inventory.md`](dependency-inventory.md)
+- [`sonarqube-setup.md`](sonarqube-setup.md): SonarQube Cloud setup. Link its first report here once scans run (docs#78)
 - Issue [docs#64](https://github.com/Dissonance-Eip/docs/issues/64)
