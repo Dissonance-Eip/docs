@@ -135,11 +135,15 @@ On `dev` on 2026-10-30, SonarQube Cloud shows 66.7% coverage for `core` and
 67.6% for `ui`. The repositories' own commands give about 92% (`core`, `npm run
 coverage`) and about 71% (`ui`, `npm run test:coverage`).
 
-The numbers differ because they count different lines. Sonar also counts lines
-the coverage build does not measure: in `core`, the `include/` headers and the
-entry points `src/cli/main.cpp` and `src/addon/addon.cpp`. The repositories'
-own commands are the reference for the 85% target. Sonar's numbers are for
-trends and for the new-code condition above.
+The numbers differ because they count different lines. In `core`, the coverage
+report sent to Sonar only lists `src/` files, so Sonar counts every line of
+header-only code in `include/` as uncovered, even when tests run it (for
+example `include/utils/SampleCodec.hpp` shows 0%). `src/cli/main.cpp` and
+`src/addon/addon.cpp` get no coverage figure in Sonar and do not lower it.
+core#151 adds `include/` to both the Sonar report and the 85% check so the two
+numbers agree. Until then, the repositories' own commands are the reference for
+the 85% target. Sonar's numbers are for trends and for the new-code condition
+above.
 
 The gate is shown on each pull request. It is not a required status check yet.
 Making it blocking is part of the team decision.
