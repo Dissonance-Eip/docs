@@ -1,13 +1,16 @@
 ---
 title: Testing policy — core
-status: active
+status: superseded
 owner: Luca Martinet
 created: 2025-12-05
-updated: 2026-09-04
+updated: 2026-10-29
 tags: [planning, testing, core]
 ---
 
 # Testing policy — core
+
+> **Superseded** on 2026-10-29 by [`test-strategy.md`](test-strategy.md), which
+> covers `core` and `ui`. Kept for history.
 
 This document outlines the testing strategy for the `dissonance-core` project.
 

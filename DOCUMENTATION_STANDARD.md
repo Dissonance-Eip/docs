@@ -184,7 +184,7 @@ history is the point.
 GitHub owns the names and the front-matter schema of a few files, so these are
 outside the rules above and the linter skips them:
 
-- `README.md` and `CONTRIBUTING.md` — conventional uppercase, no front matter.
+- `README.md`, `CONTRIBUTING.md` and `GOVERNANCE.md`: conventional uppercase, no front matter.
 - `.github/**` — `PULL_REQUEST_TEMPLATE.md`, `ISSUE_TEMPLATE/*.md`. GitHub
   requires these exact names and parses its own `name:` / `about:` front matter.
 - A benchmark's `results/` folder — generated data and generated tables, not

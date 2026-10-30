@@ -32,6 +32,7 @@ assets/            images, audio samples, slide decks
 
 - **What is the project doing right now?** [`planning/milestones.md`](planning/milestones.md)
 - **Why does it work the way it does?** [`design/core/`](design/core/) — the ADRs
+- **How the project is run:** [`GOVERNANCE.md`](GOVERNANCE.md)
 - **New to the team?** [`planning/onboarding.md`](planning/onboarding.md)
 - **How the pieces fit together:** [`architecture.md`](architecture.md)
 
@@ -48,4 +49,7 @@ assets/            images, audio samples, slide decks
    python3 scripts/check-docs.py
    ```
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the review workflow.
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the review workflow and
+[`GOVERNANCE.md`](GOVERNANCE.md) for decisions and releases.
+
+This repository is licensed under Apache 2.0, see [`LICENSE`](LICENSE).

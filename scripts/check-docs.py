@@ -22,9 +22,9 @@ REQUIRED_FIELDS = ("title", "status", "owner", "created", "updated")
 VALID_STATUS = {"draft", "review", "final", "active", "superseded"}
 
 # Root-level documents that conventionally keep an uppercase filename.
-UPPERCASE_ALLOWED = {"README.md", "CONTRIBUTING.md", "DOCUMENTATION_STANDARD.md"}
+UPPERCASE_ALLOWED = {"README.md", "CONTRIBUTING.md", "GOVERNANCE.md", "DOCUMENTATION_STANDARD.md"}
 # GitHub renders these two without front matter; adding one would show up as text.
-NO_FRONT_MATTER = {"README.md", "CONTRIBUTING.md"}
+NO_FRONT_MATTER = {"README.md", "CONTRIBUTING.md", "GOVERNANCE.md"}
 # GitHub owns the names and front-matter schema of everything under .github/.
 # A benchmark's results/ holds generated data, not documents.
 EXEMPT_DIRS = {".github", ".git", "node_modules", "results"}
