@@ -3,7 +3,7 @@ title: Coverage report, 2026-10-29
 status: draft
 owner: Luca Martinet
 created: 2026-10-29
-updated: 2026-10-29
+updated: 2026-10-30
 milestone: L
 tags: [planning, testing, coverage]
 ---
@@ -19,7 +19,23 @@ which is not met. The gap in `ui` is almost entirely untested controllers, views
 and main-process code. The CI jobs show coverage in the job summary, with no
 threshold and no badge.
 
-Targets are defined in [`test-strategy.md`](test-strategy.md).
+Targets are defined in [`test-strategy.md`](test-strategy.md). On 2026-10-30
+the target was raised to 85% line coverage for both repositories ([docs#80](https://github.com/Dissonance-Eip/docs/issues/80)). The
+measurements below are from 2026-10-29 and are kept as taken. Their Target
+column shows the new target, with the one in force on the day in brackets.
+
+## Status on 2026-10-30
+
+| Repository | Command | Lines | Target | Result |
+| --- | --- | --- | --- | --- |
+| `core` | `npm run coverage` (`src/` lines, gcov) | about 92% | 85% | Met |
+| `ui` | `npm run test:coverage` (Vitest V8), after [ui#128](https://github.com/Dissonance-Eip/ui/pull/128) | about 71% | 85% | Not met. Tracked in [ui#129](https://github.com/Dissonance-Eip/ui/issues/129) |
+
+These are approximate figures from `dev` on 2026-10-30, not a full measurement
+with a method section like the ones below. SonarQube Cloud shows 66.7% for
+`core` and 67.6% for `ui` on `dev`. Those are not the figures the target is
+checked against. See
+[Why SonarQube shows lower coverage](sonarqube-setup.md#why-sonarqube-shows-lower-coverage).
 
 ## core
 
@@ -29,7 +45,7 @@ test binary.
 
 | Measure | Value | Target | Result |
 | --- | --- | --- | --- |
-| Lines | 78.32% (744 of 950) | 70% | Met |
+| Lines | 78.32% (744 of 950) | 85% (70% on the day) | Not met at 85%. Met the 70% target in force on the day |
 
 - The command line interface and addon entry-point files are not linked into
   the test binary, so they are not measured yet. The figure does not describe
@@ -47,7 +63,7 @@ test. 6 test files, 55 tests passed and 3 expected failures.
 
 | Measure | Value | Target | Result |
 | --- | --- | --- | --- |
-| Lines | 8.92% (89 of 997) | 50% | Not met |
+| Lines | 8.92% (89 of 997) | 85% (50% on the day) | Not met |
 | Statements | 8.82% (98 of 1110) | none | n/a |
 | Branches | 12.25% (63 of 514) | none | n/a |
 | Functions | 9.12% (24 of 263) | none | n/a |
@@ -99,7 +115,7 @@ is covered lines over total lines.
 The files with coverage are the pure logic modules (state, formatting, path
 handling, the metadata service and the tag write queue), all at 100% lines, and
 part of the addon loader at 64.7%. The files with none are the controllers,
-views, components, IPC handlers and the main process. Reaching 50% lines means
+views, components, IPC handlers and the main process. Reaching 85% lines means
 covering a large share of those files, and the Electron-dependent ones need
 either test doubles or end-to-end tests.
 
@@ -114,7 +130,7 @@ Existing `ui` issues that would raise coverage:
 
 All three are open on 2026-10-29. End-to-end tests driven by Playwright may not
 be counted by the Vitest V8 report. TODO(team): confirm how that coverage will
-be measured, and set a date for reaching 50%.
+be measured. Reaching and enforcing 85% is tracked in [ui#129](https://github.com/Dissonance-Eip/ui/issues/129).
 
 ## Coverage in CI
 
@@ -127,8 +143,15 @@ be measured, and set a date for reaching 50%.
   `ui` working tree on 2026-10-29.
 - Neither repository shows a badge.
 
+On 2026-10-30 the team decided CI fails below 85%. In `core`,
+`scripts/coverage.js` will exit non-zero below 85% ([core#151](https://github.com/Dissonance-Eip/core/issues/151)). In `ui`,
+`vitest.config.mjs` will set `coverage.thresholds.lines: 85` once `ui` reaches
+85% ([ui#129](https://github.com/Dissonance-Eip/ui/issues/129)). Both issues are open on 2026-10-30.
+
 ## Related
 
 - [`test-strategy.md`](test-strategy.md)
 - [`static-analysis-report.md`](static-analysis-report.md)
+- [`sonarqube-setup.md`](sonarqube-setup.md)
 - Issue [docs#61](https://github.com/Dissonance-Eip/docs/issues/61)
+- Issue [docs#80](https://github.com/Dissonance-Eip/docs/issues/80)

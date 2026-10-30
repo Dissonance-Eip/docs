@@ -3,7 +3,7 @@ title: Testing policy — core
 status: superseded
 owner: Luca Martinet
 created: 2025-12-05
-updated: 2026-10-29
+updated: 2026-10-30
 tags: [planning, testing, core]
 ---
 
@@ -47,6 +47,8 @@ This document outlines the testing strategy for the `dissonance-core` project.
 ## Code Coverage
 
 - Goal: Maintain ≥ 70% test coverage across core logic
+- Since 2026-10-30 the target is 85% line coverage for `core` and `ui`, and CI
+  fails below it. See [`test-strategy.md`](test-strategy.md#coverage-targets).
 - Coverage tooling (future): Integration with `gcov` or `lcov`
 - Tests will be expanded as algorithms mature
 

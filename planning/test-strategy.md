@@ -3,7 +3,7 @@ title: Test strategy
 status: draft
 owner: Luca Martinet
 created: 2026-10-29
-updated: 2026-10-29
+updated: 2026-10-30
 milestone: L
 supersedes: planning/testing-policy-core.md
 tags: [planning, testing, core, ui]
@@ -15,8 +15,8 @@ tags: [planning, testing, core, ui]
 
 Automated tests are written with the change they cover, in the same pull
 request, and CI runs them before merge. The engine (`core`) is tested with
-GoogleTest and CTest, targeting 70% line coverage. The app (`ui`) is tested with
-Vitest, targeting 50% line coverage. A manual beta test plan covers what
+GoogleTest and CTest, and the app (`ui`) with Vitest. Both target 85% line
+coverage, and CI fails below it. A manual beta test plan covers what
 automation does not. This document replaces
 [`testing-policy-core.md`](testing-policy-core.md) and extends it to `ui`.
 
@@ -77,22 +77,29 @@ committed to any repository.
 
 | Repository | Target (lines) | Command | Enforced in CI |
 | --- | --- | --- | --- |
-| `core` | 70% | `npm run coverage` (CMake option `ENABLE_COVERAGE`, gcov or llvm-cov) | No. A CI job writes the total to the job summary |
-| `ui` | 50% | `npm run test:coverage` (Vitest with the V8 provider) | No |
+| `core` | 85% | `npm run coverage` (CMake option `ENABLE_COVERAGE`, gcov or `llvm-cov gcov`, lines under `src/`) | Yes. `scripts/coverage.js` exits non-zero below 85%, so the coverage job fails. Added by [core#151](https://github.com/Dissonance-Eip/core/issues/151), open on 2026-10-30 |
+| `ui` | 85% | `npm run test:coverage` (Vitest with the V8 provider) | Yes, once `ui` reaches 85%. `vitest.config.mjs` sets `coverage.thresholds.lines: 85`, so `npm run test:coverage` fails below it. Added by [ui#129](https://github.com/Dissonance-Eip/ui/issues/129), open on 2026-10-30 |
 
-The issue proposed 80% for `core` as a starting point; the team set 70%.
-The engine has the higher target because it is the critical part. The `core`
-coverage run measures `src/` only, and reports sources not linked into the test
-binary (the CLI and the addon glue) as not measured. TODO(team): decide whether
-and when to make coverage a failing gate.
+The figure that counts is the one each repository's own command prints. The
+`core` coverage run measures `src/` only, and reports sources not linked into
+the test binary (the CLI and the addon glue) as not measured. SonarQube Cloud
+shows lower numbers for both repositories because it counts a different set of
+lines. See [Why SonarQube shows lower coverage](sonarqube-setup.md#why-sonarqube-shows-lower-coverage).
+Current figures are in the [coverage report](coverage-report.md#status-on-2026-10-30).
+
+History: the issue proposed 80% for `core` as a starting point, and on
+2026-10-29 the team set 70% for `core` and 50% for `ui`, the engine having the
+higher target because it is the critical part. On 2026-10-30 the team raised
+both targets to 85% and made coverage a failing CI gate ([docs#80](https://github.com/Dissonance-Eip/docs/issues/80)), once `core`
+was at about 92% and `ui` at about 71%.
 
 ## CI gates
 
 | Repository | Workflow | Checks |
 | --- | --- | --- |
-| `core` | `core/.github/workflows/ci.yml` | cppcheck on `src/` (fails on findings), clang-format check, CMake build and CTest, coverage summary |
+| `core` | `core/.github/workflows/ci.yml` | cppcheck on `src/` (fails on findings), clang-format check, CMake build and CTest, line coverage (fails below 85% once [core#151](https://github.com/Dissonance-Eip/core/issues/151) lands) |
 | `core` | `core/.github/workflows/release-addon.yml` | On a tag: addon build on three platforms and a load check that the addon exports `process` |
-| `ui` | `ui/.github/workflows/ui-quality-checks.yml` | `npm run lint`, `npm run format:check`, `npm test`, `npm run build` |
+| `ui` | `ui/.github/workflows/ui-quality-checks.yml` | `npm run lint`, `npm run format:check`, `npm test`, `npm run build`, line coverage (fails below 85% once [ui#129](https://github.com/Dissonance-Eip/ui/issues/129) lands) |
 
 Before opening a pull request, run the same checks locally. The commands are in
 [`CONTRIBUTING.md`](../CONTRIBUTING.md). Merge rules are in
@@ -115,4 +122,6 @@ Before opening a pull request, run the same checks locally. The commands are in
 - [`regressions-caught-by-tests.md`](regressions-caught-by-tests.md)
 - [`static-analysis-report.md`](static-analysis-report.md)
 - [`CONTRIBUTING.md`](../CONTRIBUTING.md)
+- [`sonarqube-setup.md`](sonarqube-setup.md)
 - Issue [docs#59](https://github.com/Dissonance-Eip/docs/issues/59)
+- Issue [docs#80](https://github.com/Dissonance-Eip/docs/issues/80), which raised the targets to 85%
