@@ -83,17 +83,19 @@ it costs nothing until then.
 
 ## Setup steps
 
-The `dissonance-eip` organisation already exists on SonarQube Cloud, and `ui` has
-been imported with Automatic Analysis on. Organisation and project admins do the
+The `dissonance-eip` organisation already exists on SonarQube Cloud. `core`, `ui`
+and `docs` have been imported with Automatic Analysis on, and it already comments
+on pull requests. Automatic Analysis cannot read our coverage reports, so we switch
+`core` and `ui` to CI-based analysis. Organisation and project admins do the
 following steps.
 
-1. In the organisation, check the `ui` project key is `Dissonance-Eip_ui`.
-2. Import `core` with **Analyze new project**, selecting `Dissonance-Eip/core`.
-   Keep the default key `Dissonance-Eip_core`. If a key differs, update
-   `sonar-project.properties` in that repository.
-3. In each project, go to **Administration > Analysis Method** and turn off
+1. Check the project keys are `Dissonance-Eip_core` and `Dissonance-Eip_ui`. If a
+   key differs, update `sonar-project.properties` in that repository.
+2. Leave `docs` on Automatic Analysis or remove it. It holds no code to analyse.
+   It is public, so it does not count towards the 50k line limit.
+3. In `core` and `ui`, go to **Administration > Analysis Method** and turn off
    **Automatic Analysis**. CI-based analysis fails while it is on.
-4. In each project, go to **Administration > Branches and Pull Requests** and
+4. In `core` and `ui`, go to **Administration > Branches and Pull Requests** and
    rename the main branch from `main` to `dev`.
 5. Create a token under **My Account > Security**. It is personal, so use the
    account of a team member who will stay on the project.
