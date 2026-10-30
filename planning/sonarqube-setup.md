@@ -62,8 +62,8 @@ v8.3.0. Both workflows skip the scan when `SONAR_TOKEN` is missing, on
 `merge_group` runs, and on fork pull requests, which receive no secrets.
 
 Known gap in `core`: `src/cli/main.cpp` and `src/addon/addon.cpp` are not part
-of the coverage build, so they are not in its compilation database and Sonar does
-not analyse them.
+of the coverage build, so they are not in its compilation database and Sonar runs
+no C/C++ rules on them.
 
 ## CI minutes
 
@@ -123,9 +123,23 @@ the proposal is the built-in Sonar way. On new code, it requires:
 
 Coverage and duplication are only checked once a change has at least 20 new lines.
 
-The 80% applies to new code only. It does not replace the overall targets in
-[`test-strategy.md`](test-strategy.md): 70% for `core` and 50% for `ui`. A
-stricter bar on new code is how the `ui` total can climb.
+The 80% applies to new code only, and still applies to pull requests. It does
+not replace the overall target in [`test-strategy.md`](test-strategy.md): 85%
+line coverage for both `core` and `ui`, raised from 70% and 50% on 2026-10-30
+([docs#80](https://github.com/Dissonance-Eip/docs/issues/80)). The Free plan
+cannot hold a custom gate with that 85%, so it is enforced in CI, not in Sonar.
+
+### Why SonarQube shows lower coverage
+
+On `dev` on 2026-10-30, SonarQube Cloud shows 66.7% coverage for `core` and
+67.6% for `ui`. The repositories' own commands give about 92% (`core`, `npm run
+coverage`) and about 71% (`ui`, `npm run test:coverage`).
+
+The numbers differ because they count different lines. Sonar also counts lines
+the coverage build does not measure: in `core`, the `include/` headers and the
+entry points `src/cli/main.cpp` and `src/addon/addon.cpp`. The repositories'
+own commands are the reference for the 85% target. Sonar's numbers are for
+trends and for the new-code condition above.
 
 The gate is shown on each pull request. It is not a required status check yet.
 Making it blocking is part of the team decision.
@@ -137,5 +151,6 @@ TODO(team): agree the gate and decide whether it blocks merging.
 - [`static-analysis-report.md`](static-analysis-report.md), which should link the first report (docs#64)
 - [`coverage-report.md`](coverage-report.md) (docs#61)
 - [`test-strategy.md`](test-strategy.md)
+- Issue [docs#80](https://github.com/Dissonance-Eip/docs/issues/80), which raised the coverage target to 85%
 - core: `sonar-project.properties`, `.github/workflows/ci.yml`, `scripts/coverage.js`
 - ui: `sonar-project.properties`, `.github/workflows/ui-quality-checks.yml`, `vitest.config.mjs`
